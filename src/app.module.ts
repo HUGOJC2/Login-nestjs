@@ -4,7 +4,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
+import { LoginController } from './login/login.controller';
+import { RegisterController } from './register/register.controller';
+import { LoginService } from './login/login.service';
+import { RegisterService } from './register/register.service';
+import { LoginModule } from './login/login.module';
+import { RegisterModule } from './register/register.module';
+import { UserModule } from './user/user.module';
+ 
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -19,9 +26,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       database: process.env.DATABASE_BASE,
       entities: [__dirname + '/**/*.entity{.ts,.js}', __dirname + '/**/**/*.entity{.ts,.js}' ],
       synchronize: true,
-      logging: ["query", "error"]
-    })],
-  controllers: [AppController],
-  providers: [AppService],
+    }),
+    LoginModule,
+    RegisterModule,
+    UserModule],
+  controllers: [AppController, LoginController, RegisterController],
+  providers: [AppService, LoginService, RegisterService],
 })
 export class AppModule {}
