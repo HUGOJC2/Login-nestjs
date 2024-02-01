@@ -8,12 +8,12 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
+  @Post('/register')
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
-  @Get()
+  @Get('/all')
   findAll() {
     return this.userService.findAllUser();
   }
@@ -23,7 +23,7 @@ export class UserController {
     return this.userService.viewUser(+id);
   }
 
-  @Patch(':id')
+  @Patch('/update/:id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUser(+id, updateUserDto);
   }
@@ -32,4 +32,11 @@ export class UserController {
   remove(@Param('id') id: string) {
     return this.userService.removeUser(+id);
   }
+
+  // @Post('login')
+  // login(@Param('username') user: string, @Param('password') pass: string){
+  //   console.log(user);
+  //   console.log("--------------------------------");
+  //   return this.userService.login(user, pass);
+  // }
 }

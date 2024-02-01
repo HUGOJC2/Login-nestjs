@@ -6,7 +6,8 @@ import { LoginController } from './login.controller';
 @Module({
     imports: [],
     controllers: [
-        LoginController],
+        LoginController,
+        ],
     providers: [
         LoginService]
 })

@@ -49,4 +49,26 @@ export class UserService {
   removeUser(id: number): Promise<{ affected?: number}> {
     return this.userRepository.delete(id);
   }
+
+  login(username: string, password: string): boolean{
+    const user: User = new User();
+    
+    this.viewUser(1);
+    //pedimos el usuario nos regresaria los datos del usuario (validarUsuario)
+      //si existe 
+          //validarUsuario.password==password
+              //return true
+              
+              //false
+
+    if(user.username == username && user.password == password){
+      console.log(user.username);
+      console.log(username);
+      
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
 }
