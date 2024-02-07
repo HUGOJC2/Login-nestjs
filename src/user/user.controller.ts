@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Login } from './dto/login.dto';
 
 @Controller('user')
 export class UserController {
@@ -33,10 +34,10 @@ export class UserController {
     return this.userService.removeUser(+id);
   }
 
-  // @Post('login')
-  // login(@Param('username') user: string, @Param('password') pass: string){
-  //   console.log(user);
-  //   console.log("--------------------------------");
-  //   return this.userService.login(user, pass);
-  // }
+  @HttpCode(HttpStatus.OK)
+  @Post('/login')
+  signIn(@Body() signInDto: Login) {
+    return this.userService.login(signInDto);
+  }
+
 }
