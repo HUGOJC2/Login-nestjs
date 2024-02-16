@@ -24,6 +24,11 @@ export class UserController {
     return this.userService.viewUser(+id);
   }
 
+  @Get('/detail/:username')
+  detailUser(@Param('username') username: string) {
+    return this.userService.detailUser(username);
+  }
+
   @Patch('/update/:id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUser(+id, updateUserDto);
@@ -38,6 +43,11 @@ export class UserController {
   @Post('/login')
   signIn(@Body() signInDto: Login) {
     return this.userService.login(signInDto);
+  }
+
+  @Patch('/update_pass/:username')
+  updatepass(@Param('username') username: string, @Body('password') password: string) {
+    return this.userService.updatePass(username, password);
   }
 
 }

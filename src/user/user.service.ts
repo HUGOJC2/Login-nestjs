@@ -35,6 +35,10 @@ export class UserService {
     return this.userRepository.findOneBy({ id });
   }
 
+  detailUser(username: string): Promise<User> {
+    return this.userRepository.findOneBy({ username });
+  }
+
   updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const user: User = new User();
     user.username = updateUserDto.username;
@@ -45,6 +49,12 @@ export class UserService {
     user.updated_at = new Date();
     user.id = id;
     return this.userRepository.save(user);
+  }
+
+  async updatePass(username: string, password: string){
+    const user = await this.detailUser(username);
+    user.password = password
+    this.userRepository.save(user);
   }
 
   removeUser(id: number): Promise<{ affected?: number}> {
