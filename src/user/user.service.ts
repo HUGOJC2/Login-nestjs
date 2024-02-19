@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,6 +7,7 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { Login } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserService {
@@ -16,10 +17,19 @@ export class UserService {
     private jwtService: JwtService
   ) {}
 
-  create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const userFound = await this.userRepository.findOne({
+      where: {
+          username: createUserDto.username,
+      },
+    });
+
+    if(userFound)
+      throw new HttpException('El usuario ya existe', HttpStatus.CONFLICT);
+
     const user: User = new User();
     user.username = createUserDto.username;
-    user.password = createUserDto.password;
+    user.password = await this.hashPassword(createUserDto.password);
     user.name = createUserDto.name;
     user.middle_name = createUserDto.middle_name;
     user.last_name = createUserDto.last_name;
@@ -53,7 +63,7 @@ export class UserService {
 
   async updatePass(username: string, password: string){
     const user = await this.detailUser(username);
-    user.password = password
+    user.password = await this.hashPassword(password);
     this.userRepository.save(user);
   }
 
@@ -63,14 +73,20 @@ export class UserService {
 
   async login(usern: Login): Promise<{token: string}>{
     const user =  await this.userRepository.findOne({where: {username: usern.username}});
-    if(user?.password !== usern.password){
+    
+    if(!await bcrypt.compare(usern.password, user.password)){
       throw new UnauthorizedException();
     }
     const payload = { sub: user.id, username: user.username} ;
 
-    return {
+    return {  
       token: await this.jwtService.signAsync(payload),
     };
+  }
+
+  async hashPassword(password: string): Promise<string> {
+    const saltOrRounds = 10;
+    return await bcrypt.hash(password, saltOrRounds);
   }
 
 }
