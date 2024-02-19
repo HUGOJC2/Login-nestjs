@@ -52,7 +52,7 @@ export class UserService {
   updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const user: User = new User();
     user.username = updateUserDto.username;
-    user.password = updateUserDto.password;
+    // user.password = updateUserDto.password;
     user.name = updateUserDto.name;
     user.middle_name = updateUserDto.middle_name;
     user.last_name = updateUserDto.last_name;
