@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Roles } from "src/auth_user/entities/roles.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -20,6 +21,13 @@ export class User {
     
     @Column()
     last_name: string;
+
+    @ManyToOne(()=> Roles)
+    @JoinColumn({name: 'role_id'})
+    roles: Roles;
+
+    @Column({comment: 'Id del registro de rol.'})
+    role_id: number;
 
     @Column({nullable: true})
     created_by: string;

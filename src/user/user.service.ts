@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -34,6 +34,7 @@ export class UserService {
     user.middle_name = createUserDto.middle_name;
     user.last_name = createUserDto.last_name;
     user.created_at = new Date();
+    user.role_id = createUserDto.id_role;
     return this.userRepository.save(user);
   }
 
@@ -57,6 +58,7 @@ export class UserService {
     user.middle_name = updateUserDto.middle_name;
     user.last_name = updateUserDto.last_name;
     user.updated_at = new Date();
+    user.role_id = updateUserDto.id_role;
     user.id = id;
     return this.userRepository.save(user);
   }
@@ -88,5 +90,31 @@ export class UserService {
     const saltOrRounds = 10;
     return await bcrypt.hash(password, saltOrRounds);
   }
+
+  async findOneByUsernameWithRolePermissions(username: string) {
+    
+    const userFound = await this.userRepository
+        .createQueryBuilder('user')
+        .innerJoin('user.roles', 'role')
+        .addSelect(['role'])
+        .innerJoin('role.permissions', 'per')
+        .addSelect(['per'])
+        .where('user.username = :username', {
+          username: username,
+        })
+        .getOne();
+
+    if (!userFound)
+      throw new NotFoundException(`${username} Usuario no encontrado`);
+    const permissionsArray = [];
+    userFound.roles.permissions.forEach((element) =>
+        permissionsArray.push(element.permission),
+    );
+    const user = {
+        role: userFound.roles.role,
+        permissions: permissionsArray,
+    };
+    return user;
+}
 
 }

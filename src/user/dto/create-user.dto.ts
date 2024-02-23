@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsNotEmpty, IsString, Matches, MinLength } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString, Matches, MinLength } from "class-validator";
 
 const passwordRegEx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,20}$/;
 
@@ -32,5 +32,8 @@ export class CreateUserDto {
     @IsString()
     @MinLength(2, { message: 'Apellido Materno debe tener al menos 2 caracteres.' })
     last_name: string;
+
+    @IsNumber()
+    id_role: number;
     
 }

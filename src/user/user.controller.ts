@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Res} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -48,6 +48,17 @@ export class UserController {
   @Patch('/update_pass/:username')
   updatepass(@Param('username') username: string, @Body('password') password: string) {
     return this.userService.updatePass(username, password);
+  }
+
+  @Get('/:username/permissions')
+  async findOneByUsernameWithRolePermissions(@Res() response, @Param('username') username: string) {
+      try {
+          const user = await this.userService.findOneByUsernameWithRolePermissions(username);
+          console.log(user);
+          return response.status(HttpStatus.OK).json({ payload: user });
+      } catch (error) {
+          return response.status(error.status).json(error.response);
+      }
   }
 
 }
