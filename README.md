@@ -1,7 +1,5 @@
 # Back-end del Template
 
-![Logo](https://transparencia.sacmex.cdmx.gob.mx/plantilla//img/LogoN2.png)
-
 This is the repository for the back-end of the system ‘Template’. 
 
 <p align="center">
