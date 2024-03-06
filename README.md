@@ -1,3 +1,9 @@
+# Back-end del Template
+
+![Logo](https://transparencia.sacmex.cdmx.gob.mx/plantilla//img/LogoN2.png)
+
+This is the repository for the back-end of the system ‘Template’. 
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
@@ -31,6 +37,25 @@
 ```bash
 $ npm install
 ```
+
+## Environment Variables
+
+  To run this project, you will need to add the following environment variables to your .env file
+
+  `MAIN_PORT=`  
+  `VERSION=`  
+  `DATABASE_HOST=`  
+  `DATABASE_PORT=`  
+  `DATABASE_USER=`  
+  `DATABASE_PASSWORD=`  
+  `DATABASE_BASE=`  
+  `JWT_SECRET=`  
+  `WHITELISTIP=`  
+  `WHITELIST=`  
+  `LOGO_CDMX=`  
+  `LOGO_CIUDAD_INNOVADORA=`  
+  `PUBLIC_STATIC_SERVER_IP=`  
+  `PUBLIC_STATIC_SERVER_PATH= `  
 
 ## Running the app
 
